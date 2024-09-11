@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Admin Page";
+}
+
+@model IEnumerable<BestStore.Models.UserRole>
+
+<h2>Manage User Roles</h2>
+
+@if (!Model.Any())
+{
+    <p>No users available.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Current Role</th>
+                <th>Assign New Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <form asp-action="AssignRole" method="post">
+                    <input type="hidden" name="UserId" value="@user.UserId" />
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.CurrentRole</td>
+                    <td>
+                        <select name="RoleName" class="form-control">
+                                @foreach (var role in user.AvailableRoles)
+                                {
+                                    if (role == user.CurrentRole)
+                                    {
+                                    <option value="@role" selected>@role</option>
+                                    }
+                                    else
+                                    {
+                                    <option value="@role">@role</option>
+                                    }
+                                }
+                                @if (!user.AvailableRoles.Any())
+                                {
+                                <option disabled>No Roles Available</option>
+                                }
+                        </select>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-primary">Assign Role</button>
+                    </td>
+                </tr>
+                </form>
+            }
+        </tbody>
+    </table>
+}
